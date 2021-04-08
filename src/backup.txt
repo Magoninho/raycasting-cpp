@@ -1,0 +1,44 @@
+bool foundVerticalWall = false;
+
+xintersect = rmDec(fPlayerX / TILESIZE) * TILESIZE;
+
+if (rayAngle < 0.5 * PI || rayAngle > 1.5 * PI) // looking right
+	xintersect += TILESIZE;
+
+yintersect = fPlayerY + (xintersect - fPlayerX) / tan(rayAngle);
+
+xstep = TILESIZE;
+
+if (!(rayAngle < 0.5 * PI || rayAngle > 1.5 * PI)) // looking left
+	//invert the xstep if looking up (because y grows down, not up)
+	xstep *= -1;
+
+ystep = xstep * tan(rayAngle);
+
+float nextVerticalX = xintersect;
+float nextVerticalY = yintersect;
+
+if (!(rayAngle < 0.5 * PI || rayAngle > 1.5 * PI)) // looking left
+	nextVerticalX -= 0.01; // this is for fixing the bug of offset
+
+// starting the vertical checking
+
+while (nextVerticalX >= 0 &&
+		nextVerticalX <= WINDOW_WIDTH &&
+		nextVerticalY >= 0
+		&& nextVerticalY <= WINDOW_HEIGHT)
+{
+	if (map.hasWallAt(nextVerticalX, nextVerticalY))
+	{
+		foundVerticalWall = true;
+		// if we find a wall, then store the position of the hit
+		verticalHitX = nextVerticalX;
+		verticalHitY = nextVerticalY;
+		break;
+	} else
+	{
+		// if wall not found, then continue checking
+		nextVerticalX += xstep;
+		nextVerticalY += ystep;
+	}
+}
