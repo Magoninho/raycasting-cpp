@@ -6,6 +6,7 @@
  */
 #include <SFML/Graphics.hpp>
 #include "Constants.h"
+#include "Player.h"
 
 #ifndef RAY_H_
 #define RAY_H_
@@ -13,19 +14,28 @@
 class Ray
 {
 public:
-	Ray(float rayAngle);
+	Ray(float rayAngle, Player& player, Map& map);
 	virtual ~Ray();
 
 public:
-	float rayAngle;
-	float wallHitX;
-	float wallHitY;
-	float finalDistance;
+	Player 	player;
+	Map	  	map;
+	float 	rayAngle;
+	float 	wallPositionX;
+	float 	wallPositionY;
+	float 	finalDistance;
 
 public:
-	void cast();
+	void castLine(sf::RenderWindow& window, int x, int y, int endX, int endY, sf::Color color);
 	void render(sf::RenderWindow& window);
+	void cast();
 
+
+	float horizontalHitX;
+	float horizontalHitY;
+
+	float verticalHitX;
+	float verticalHitY;
 
 };
 

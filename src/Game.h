@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Map.h"
 #include "Player.h"
+#include "Ray.h"
 
 #ifndef GAME_H_
 #define GAME_H_
@@ -23,6 +24,8 @@ public:
 public:
 	// public methods
 
+	void 					castAllRays();
+
 public:
 	// public variables
 
@@ -33,6 +36,8 @@ private:
 
 	Player					player;
 	Map						map;
+
+	std::vector<Ray> 		rays;
 
 	sf::Font				FPSFont;
 	sf::Text				FPS;

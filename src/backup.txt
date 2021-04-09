@@ -42,3 +42,4 @@ while (nextVerticalX >= 0 &&
 		nextVerticalY += ystep;
 	}
 }
+

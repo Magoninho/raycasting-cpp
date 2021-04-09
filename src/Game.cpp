@@ -8,8 +8,7 @@
 #include "Game.h"
 
 Game::Game()
-	: window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game"),
-	  player(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+	: window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game")
 {
 	if(!FPSFont.loadFromFile("Media/jetbrains.ttf"))
 		printf("error while loading the font");
@@ -20,7 +19,20 @@ Game::Game()
 	FPS.setPosition(0, 0);
 }
 
+void Game::castAllRays()
+{
 
+	for (float i = 0; i < NUM_OF_RAYS; i++)
+	{
+		float rayAngle = (player.fPlayerAngle - FOV/2.0) + (i/NUM_OF_RAYS) * FOV;
+		Ray ray(rayAngle, this->player, map);
+		rays.push_back(ray);
+
+		// std::cout << rays[i].rayAngle << std::endl;
+		rays[i].cast();
+	}
+
+}
 
 void Game::processEvents()
 {
@@ -69,7 +81,7 @@ void Game::processEvents()
 
 void Game::update(sf::Time& deltaTime)
 {
-	player.castAllRays(map);
+	castAllRays();
 	player.update(deltaTime);
 }
 
@@ -78,6 +90,10 @@ void Game::render()
 	window.clear(sf::Color::Black);
 	map.render(window);
 	player.render(window);
+
+	for(auto ray : rays)
+	  ray.render(window);
+	rays.clear();
 	window.display();
 }
 

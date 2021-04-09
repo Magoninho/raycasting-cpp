@@ -16,7 +16,7 @@
 class Player
 {
 public:
-											Player(float nPlayerX, float nPlayerY);
+											Player(); // TODO: TRY TO SEE WTF IN GOING ON
 	virtual 								~Player();
 
 
@@ -38,7 +38,6 @@ public:
 	void									update(sf::Time& deltaTime);
 	void 									render(sf::RenderWindow& window);
 
-	void									castAllRays(Map map);
 	void 									castLine(sf::RenderWindow& window, int x, int y, int endX, int endY, sf::Color color);
 
 
