@@ -18,7 +18,7 @@ Player::Player()
 	fPlayerX = WINDOW_WIDTH / 2;
 	fPlayerY = WINDOW_HEIGHT / 2;
 
-	fPlayerAngle = PI; // (90 degrees)
+	fPlayerAngle = 3*PI / 2; // (90 degrees)
 	fPlayerSpeed = 2;
 	fRotationSpeed = 2 * (PI / 180);
 	nRadius = 5;

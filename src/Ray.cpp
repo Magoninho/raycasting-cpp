@@ -30,10 +30,7 @@ Ray::Ray(float rayAngle, Player& player, Map& map)
 	wallPositionY = 0;
 	finalDistance = 0;
 
-	horizontalHitX = 0;
-	horizontalHitY = 0;
-	verticalHitX = 0;
-	verticalHitY = 0;
+
 
 }
 
@@ -54,13 +51,62 @@ void Ray::cast()
 {
 	float xintersect, yintersect;
 	float xstep, ystep;
+
+	///////////////////////
+	// Vertical checking //
+	///////////////////////
+
+	bool foundVerticalWall = false;
+
+	xintersect = (float)((int)(player.fPlayerX / TILESIZE)) * TILESIZE;
+
+	if (rayAngle < 0.5 * PI || rayAngle > 1.5 * PI) // looking right
+		xintersect += TILESIZE;
+
+	yintersect = player.fPlayerY + (xintersect - player.fPlayerX) * tan(rayAngle);
+
+	xstep = TILESIZE;
+
+	if (rayAngle > 0.5 * PI && rayAngle < 1.5 * PI) // looking left
+		//invert the xstep if looking up (because y grows down, not up)
+		xstep *= -1;
+
+	ystep = xstep * tan(rayAngle);
+
+	float nextVerticalX = xintersect;
+	float nextVerticalY = yintersect;
+
+	if (rayAngle > 0.5 * PI && rayAngle < 1.5 * PI) // looking left
+		nextVerticalX -= 1; // this is for fixing the bug of offset
+
+	// starting the vertical checking
+
+	while (nextVerticalX >= 0 &&
+			nextVerticalX <= WINDOW_WIDTH &&
+			nextVerticalY >= 0 &&
+			nextVerticalY <= WINDOW_HEIGHT)
+	{
+		if (map.hasWallAt(nextVerticalX, nextVerticalY))
+		{
+			foundVerticalWall = true;
+			// if we find a wall, then store the position of the hit
+			verticalHitX = nextVerticalX;
+			verticalHitY = nextVerticalY;
+			break;
+		} else
+		{
+			// if wall not found, then continue checking
+			nextVerticalX += xstep;
+			nextVerticalY += ystep;
+		}
+	}
 	///////////////////////////////
 	// horizontal check
 	//////////////////////////////
 
 	bool foundHorizontalWall = false;
 
-	yintersect = (int)(player.fPlayerY / TILESIZE) * TILESIZE;
+	yintersect = (float)((int)(player.fPlayerY / TILESIZE) * TILESIZE);
 
 	if (rayAngle > 0 && rayAngle < PI) // looking down
 		yintersect += TILESIZE;
@@ -69,7 +115,7 @@ void Ray::cast()
 
 	ystep = TILESIZE;
 
-	if (!(rayAngle > 0 && rayAngle < PI)) // looking up
+	if (rayAngle > PI && rayAngle < 2*PI) // looking up
 		//invert the ystep if looking up (because y grows down, not up)
 		ystep *= -1;
 
@@ -78,15 +124,15 @@ void Ray::cast()
 	float nextHorizontalX = xintersect;
 	float nextHorizontalY = yintersect;
 
-	if (!(rayAngle > 0 && rayAngle < PI))
+	if (rayAngle > PI && rayAngle < 2*PI)
 		nextHorizontalY -= 0.01; // this is for fixing the bug of offset
 
 	// starting the horizontal checking
 
 	while (nextHorizontalX <= WINDOW_WIDTH &&
-			nextHorizontalX >= 0 &&
-			nextHorizontalY <= WINDOW_HEIGHT &&
-			nextHorizontalY >= 0)
+		  nextHorizontalX >= 0 &&
+		  nextHorizontalY <= WINDOW_HEIGHT &&
+		  nextHorizontalY >= 0)
 	{
 		if (map.hasWallAt(nextHorizontalX, nextHorizontalY))
 		{
@@ -103,56 +149,6 @@ void Ray::cast()
 		}
 	}
 
-
-
-	///////////////////////
-	// Vertical checking //
-	///////////////////////
-
-	bool foundVerticalWall = false;
-
-	xintersect = (int)(player.fPlayerX / TILESIZE) * TILESIZE;
-
-	if (rayAngle < 0.5 * PI || rayAngle > 1.5 * PI) // looking right
-		xintersect += TILESIZE;
-
-	yintersect = player.fPlayerY + (xintersect - player.fPlayerX) / tan(rayAngle);
-
-	xstep = TILESIZE;
-
-	if (rayAngle > 0.5 * PI && rayAngle < 1.5 * PI) // looking left
-		//invert the xstep if looking up (because y grows down, not up)
-		xstep *= -1;
-
-	ystep = xstep * tan(rayAngle);
-
-	float nextVerticalX = xintersect;
-	float nextVerticalY = yintersect;
-
-	if (!(rayAngle < 0.5 * PI || rayAngle > 1.5 * PI)) // looking left
-		nextVerticalX -= 0.01; // this is for fixing the bug of offset
-
-	// starting the vertical checking
-
-	while (nextVerticalX >= 0 &&
-			nextVerticalX <= WINDOW_WIDTH &&
-			nextVerticalY >= 0
-			&& nextVerticalY <= WINDOW_HEIGHT)
-	{
-		if (map.hasWallAt(nextVerticalX, nextVerticalY))
-		{
-			foundVerticalWall = true;
-			// if we find a wall, then store the position of the hit
-			verticalHitX = nextVerticalX;
-			verticalHitY = nextVerticalY;
-			break;
-		} else
-		{
-			// if wall not found, then continue checking
-			nextVerticalX += xstep;
-			nextVerticalY += ystep;
-		}
-	}
 
 	/////////////////////////////////////////////////////////////////////////
 	//							  Distance
