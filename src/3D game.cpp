@@ -1,9 +1,9 @@
 //============================================================================
-// Name        : 3D.cpp
+// Name        : 3D game.cpp
 // Author      : Magoninho
 // Version     :
 // Copyright   : Magoninho
-// Description : Hello World in C++, Ansi-style
+// Description : Raycasting in C++, Ansi-style
 //============================================================================
 
 #include "Game.h"

@@ -31,12 +31,6 @@ public:
 	void cast();
 
 
-	float horizontalHitX = 0;
-	float horizontalHitY = 0;
-
-	float verticalHitX = 0;
-	float verticalHitY = 0;
-
 };
 
 #endif /* RAY_H_ */

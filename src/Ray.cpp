@@ -26,12 +26,9 @@ Ray::Ray(float rayAngle, Player& player, Map& map)
 	this->rayAngle = normalizeAngle(rayAngle);
 	this->player = player;
 	this->map = map;
-	wallPositionX = 0;
-	wallPositionY = 0;
-	finalDistance = 0;
-
-
-
+	this->wallPositionX = 0;
+	this->wallPositionY = 0;
+	this->finalDistance = 0;
 }
 
 
@@ -55,6 +52,9 @@ void Ray::cast()
 	///////////////////////
 	// Vertical checking //
 	///////////////////////
+
+	float verticalHitX = 0;
+	float verticalHitY = 0;
 
 	bool foundVerticalWall = false;
 
@@ -103,8 +103,9 @@ void Ray::cast()
 	///////////////////////////////
 	// horizontal check
 	//////////////////////////////
-
 	bool foundHorizontalWall = false;
+	float horizontalHitX = 0;
+	float horizontalHitY = 0;
 
 	yintersect = (float)((int)(player.fPlayerY / TILESIZE) * TILESIZE);
 

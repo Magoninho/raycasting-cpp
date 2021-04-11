@@ -81,7 +81,6 @@ void Game::processEvents()
 
 void Game::update(sf::Time& deltaTime)
 {
-	castAllRays();
 	player.update(deltaTime);
 }
 
@@ -90,7 +89,7 @@ void Game::render()
 	window.clear(sf::Color::Black);
 	map.render(window);
 	player.render(window);
-
+	castAllRays();
 	for(auto ray : rays)
 	  ray.render(window);
 	rays.clear();
