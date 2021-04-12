@@ -8,32 +8,39 @@
 #include "Game.h"
 
 Game::Game()
-	: window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game")
+	: window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game", sf::Style::Close)
 {
+	window.setPosition(sf::Vector2i(10, 50));
+	// loading font
 	if(!FPSFont.loadFromFile("Media/jetbrains.ttf"))
 		printf("error while loading the font");
 
+	// configuring font
 	FPS.setFont(FPSFont);
 	FPS.setScale(0.7f, 0.7f);
 	FPS.setFillColor(sf::Color::White);
 	FPS.setPosition(0, 0);
 }
 
+/*
+ * This function will iterate through the number of rays, create a ray with an angle created with the index, and cast this ray
+ * */
 void Game::castAllRays()
 {
-
 	for (float i = 0; i < NUM_OF_RAYS; i++)
 	{
 		float rayAngle = (player.fPlayerAngle - FOV/2.0) + (i/NUM_OF_RAYS) * FOV;
 		Ray ray(rayAngle, this->player, map);
 		rays.push_back(ray);
-
 		// std::cout << rays[i].rayAngle << std::endl;
 		rays[i].cast();
 	}
-
 }
 
+
+/*
+ * Processing the SFML events
+ * */
 void Game::processEvents()
 {
 	sf::Event event;
@@ -46,6 +53,7 @@ void Game::processEvents()
 			window.close();
 			break;
 
+		// Player movement!
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::W)
 				player.nWalkingDirection = 	1;
@@ -78,12 +86,17 @@ void Game::processEvents()
 	}
 }
 
-
+/*
+ * The update function
+ * */
 void Game::update(sf::Time& deltaTime)
 {
 	player.update(deltaTime);
 }
 
+/*
+ * Rendering all the stuff
+ * */
 void Game::render()
 {
 	window.clear(sf::Color::Black);
@@ -93,20 +106,27 @@ void Game::render()
 	for(auto ray : rays)
 	  ray.render(window);
 	rays.clear();
+	window.draw(FPS);
 	window.display();
 }
 
-
-void Game::showFPS(float fps)
+/*
+ * Sets the FPS
+ * */
+void Game::setFPS(int fps)
 {
 	FPS.setString(std::to_string(fps) + "FPS");
 }
 
+/*
+ * Initializes the GAME LOOP
+ * */
+
 void Game::run()
 {
-	int frames = 0;
-	int fps = 60;
+	int fps = 100;
 	sf::Clock clock;
+	sf::Clock fpsClock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Time timePerFrame = sf::seconds(1.f / fps);
 
@@ -117,6 +137,7 @@ void Game::run()
 		 * The game will only update if the time passed is the same as 1 divided by the amount of fps
 		 * */
 		timeSinceLastUpdate += clock.restart();
+
 		processEvents();
 
 		while (timeSinceLastUpdate > timePerFrame) // time per frame
@@ -124,19 +145,11 @@ void Game::run()
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 			update(timePerFrame);
-			// completou 1 segundo (60 frames)
-			frames++;
 		}
 
-
-		// probably this is not even working (help pls)
-		if (frames > fps)
-		{
-
-			showFPS((1.f/  clock.getElapsedTime().asSeconds())/100);
-			frames -= fps;
-			clock.restart().asSeconds();
-		}
+		// Shows the FPS on the screen
+		setFPS(1.f / fpsClock.getElapsedTime().asSeconds());
+		fpsClock.restart();
 
 		render();
 	}
@@ -145,6 +158,5 @@ void Game::run()
 
 Game::~Game()
 {
-	// TODO Auto-generated destructor stub
 }
 

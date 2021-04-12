@@ -38,8 +38,6 @@ public:
 	void									update(sf::Time& deltaTime);
 	void 									render(sf::RenderWindow& window);
 
-	void 									castLine(sf::RenderWindow& window, int x, int y, int endX, int endY, sf::Color color);
-
 
 };
 

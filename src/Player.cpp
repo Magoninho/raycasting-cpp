@@ -8,10 +8,6 @@
 #include "Player.h"
 #include "Ray.h"
 
-int rmDec(float number)
-{
-	return (int)number;
-}
 
 Player::Player()
 {
@@ -19,8 +15,8 @@ Player::Player()
 	fPlayerY = WINDOW_HEIGHT / 2;
 
 	fPlayerAngle = 3*PI / 2; // (90 degrees)
-	fPlayerSpeed = 2;
-	fRotationSpeed = 2 * (PI / 180);
+	fPlayerSpeed = 120;
+	fRotationSpeed = 150 * (PI / 180);
 	nRadius = 5;
 
 	nTurnDirection = 0;
@@ -29,30 +25,16 @@ Player::Player()
 
 }
 
-void Player::castLine(sf::RenderWindow& window, int x, int y, int endX, int endY, sf::Color color)
-{
-	sf::Vertex line[] =
-	{
-		sf::Vertex(sf::Vector2f(x, y)),
-		sf::Vertex(sf::Vector2f(endX, endY))
-	};
-	line[0].color = color;
-	line[1].color = color;
-	window.draw(line, 2, sf::Lines);
-}
-
-
-
 void Player::update(sf::Time& deltaTime)
 {
 	// rotation i guess
-	fPlayerAngle += fRotationSpeed * nTurnDirection;
+	fPlayerAngle += fRotationSpeed * nTurnDirection * deltaTime.asSeconds();
 
 	// TODO: COLLISIONS
 
 	int nMoveStep = nWalkingDirection * fPlayerSpeed; // gets the move step based from the walking direction, which can be -1, 0 or 1
-	fPlayerX += cos(fPlayerAngle) * nMoveStep;
-	fPlayerY += sin(fPlayerAngle) * nMoveStep;
+	fPlayerX += cos(fPlayerAngle) * nMoveStep * deltaTime.asSeconds();
+	fPlayerY += sin(fPlayerAngle) * nMoveStep * deltaTime.asSeconds();
 
 	// reset the angle
 	if (fPlayerAngle < 0)
@@ -73,6 +55,5 @@ void Player::render(sf::RenderWindow& window)
 
 Player::~Player()
 {
-	// TODO Auto-generated destructor stub
 }
 

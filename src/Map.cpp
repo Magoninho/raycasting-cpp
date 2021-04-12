@@ -11,11 +11,20 @@ Map::Map()
 {
 }
 
-int Map::hasWallAt(int x, int y)
+/*
+ * A function that returns if there is a wall on the grid array just by taking x and y coordinates
+ * */
+bool Map::hasWallAt(int x, int y)
 {
 	return grid[(int)floor(y / TILESIZE)][(int)floor(x / TILESIZE)] == 1;
 }
 
+
+/*
+ * Renders the map on the screen
+ * Basically it goes through the columns and rows of the grid array, and draws a rectangle based on the value found.
+ * If it founds a spot that has 1, it will draw a wall, if it founds 0, it will draw blank space.
+ * */
 void Map::render(sf::RenderWindow& window)
 {
 	for (int i = 0; i < ROWS; i++)
@@ -46,6 +55,5 @@ void Map::render(sf::RenderWindow& window)
 
 Map::~Map()
 {
-	// TODO Auto-generated destructor stub
 }
 

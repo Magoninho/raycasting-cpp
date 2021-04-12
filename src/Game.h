@@ -47,7 +47,7 @@ private:
 	void					processEvents();
 	void					update(sf::Time& deltaTime);
 	void					render();
-	void					showFPS(float fps);
+	void					setFPS(int fps);
 
 
 

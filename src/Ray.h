@@ -29,8 +29,6 @@ public:
 	void castLine(sf::RenderWindow& window, int x, int y, int endX, int endY, sf::Color color);
 	void render(sf::RenderWindow& window);
 	void cast();
-
-
 };
 
 #endif /* RAY_H_ */

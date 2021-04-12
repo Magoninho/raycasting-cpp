@@ -19,7 +19,7 @@ constexpr int WINDOW_HEIGHT = ROWS * TILESIZE;
 
 constexpr float FOV = 60 * (PI / 180);
 
-constexpr int NUM_OF_RAYS = WINDOW_WIDTH / 4;
+constexpr int NUM_OF_RAYS = WINDOW_WIDTH / 4; // divided by 4, just to not cast to many rays
 
 
 

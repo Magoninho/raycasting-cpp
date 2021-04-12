@@ -19,7 +19,7 @@ public:
 	virtual 					~Map();
 
 public:
-	int							hasWallAt(int x, int y);
+	bool						hasWallAt(int x, int y);
 	void						render(sf::RenderWindow& window);
 
 
